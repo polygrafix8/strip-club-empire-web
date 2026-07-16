@@ -3,8 +3,8 @@
 Neon velvet marketing site for **Strip Club Empire** (PC / Steam).
 
 ## Live
-- **Repo:** https://github.com/irangilakico/strip-club-empire-web
-- **GitHub Pages:** https://irangilakico.github.io/strip-club-empire-web/
+- **Repo:** https://github.com/polygrafix8/strip-club-empire-web
+- **GitHub Pages:** https://polygrafix8.github.io/strip-club-empire-web/
 - **Custom domain (target):** https://stripclubempire.com/  
   DNS must point at GitHub Pages (see below). Until then the domain may still redirect to Facebook.
 
@@ -42,11 +42,11 @@ GitHub Pages is configured with CNAME `stripclubempire.com`.
    - `2606:50c0:8001::153`
    - `2606:50c0:8002::153`
    - `2606:50c0:8003::153`
-4. Add **CNAME** for `www` → `irangilakico.github.io`
+4. Add **CNAME** for `www` → `polygrafix8.github.io`
 5. In GitHub → repo **Settings → Pages**: enforce HTTPS once DNS goes green.
 
 **Option B — subdomain only:**  
-`www` CNAME → `irangilakico.github.io` (and open `www.stripclubempire.com`).
+`www` CNAME → `polygrafix8.github.io` (and open `www.stripclubempire.com`).
 
 Propagation: often 5–60 minutes, sometimes up to 24–48h.
 
