@@ -6,6 +6,7 @@
 // === CONFIG (swap these when live) ===
 const STEAM_URL = ''; // e.g. 'https://store.steampowered.com/app/XXXXX/Strip_Club_Empire/'
 const FACEBOOK_URL = 'https://www.facebook.com/stripclubempire/';
+const TWITTER_URL = 'https://x.com/stripclubempire';
 const YOUTUBE_VIDEO_ID = '2JXnBtyA3ig'; // sizzle; swap for gameplay trailer later
 const YOUTUBE_ORIGIN_HOST = 'stripclubempire.com';
 // Optional local MP4 fallback path (leave empty to use YouTube)
@@ -278,6 +279,12 @@ function initExternalLinks() {
     ['fbLink', 'fbFooter', 'fbMobileLink'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) el.href = FACEBOOK_URL;
+    });
+  }
+  if (typeof TWITTER_URL === 'string' && TWITTER_URL) {
+    ['xLink', 'xFooter', 'xMobileLink'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.href = TWITTER_URL;
     });
   }
 }
