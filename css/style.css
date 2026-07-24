@@ -61,17 +61,18 @@ body {
   min-height: 100vh;
 }
 
-/* Ambient reactive canvas / mesh */
+/* Ambient reactive canvas / mesh + Steam page BG mood */
 .ambient {
   position: fixed;
   inset: 0;
   z-index: -2;
   pointer-events: none;
   background:
-    radial-gradient(1000px 600px at 15% 10%, rgba(255, 45, 149, 0.18), transparent 55%),
-    radial-gradient(900px 700px at 85% 20%, rgba(177, 77, 255, 0.16), transparent 50%),
+    radial-gradient(1000px 600px at 15% 10%, rgba(255, 45, 149, 0.22), transparent 55%),
+    radial-gradient(900px 700px at 85% 20%, rgba(177, 77, 255, 0.18), transparent 50%),
     radial-gradient(800px 500px at 50% 90%, rgba(0, 240, 255, 0.08), transparent 55%),
-    linear-gradient(180deg, #0a0612 0%, #07040c 50%, #0b0614 100%);
+    linear-gradient(180deg, rgba(7, 4, 12, 0.82) 0%, rgba(7, 4, 12, 0.92) 55%, rgba(7, 4, 12, 0.96) 100%),
+    url('../assets/images/page-bg.jpg') center top / cover no-repeat fixed;
   animation: ambientPulse 12s ease-in-out infinite alternate;
 }
 
@@ -466,9 +467,10 @@ a:hover { color: var(--primary-hover); }
 
 .hero-frame img {
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
-  transform: scale(1.02);
+  object-position: center;
+  transform: scale(1.01);
   transition: transform 1.2s ease;
 }
 
@@ -517,8 +519,21 @@ a:hover { color: var(--primary-hover); }
 }
 
 .float-card.one { top: 8%; left: -4%; animation-delay: 0s; }
-.float-card.two { top: 18%; right: -4%; animation-delay: 1.2s; }
-.float-card.three { bottom: 6%; left: 8%; animation-delay: 0.6s; width: min(150px, 24vw); }
+.float-card.two { top: 14%; right: -4%; animation-delay: 1.2s; }
+.float-card.three {
+  bottom: 8%;
+  left: 6%;
+  width: min(120px, 20vw);
+  animation-delay: 0.6s;
+  border-radius: 50%;
+  border-color: rgba(255, 45, 149, 0.45);
+  box-shadow: 0 0 28px rgba(255, 45, 149, 0.35), 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+.float-card.three img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: #000;
+}
 
 @keyframes floatY {
   0%, 100% { transform: translateY(0); }
