@@ -1177,6 +1177,134 @@ a:hover { color: var(--primary-hover); }
   font-weight: 600;
 }
 
+.content-warn {
+  display: inline-block;
+  margin-top: 0.35rem;
+  color: #ffb3d4;
+  font-weight: 600;
+  font-size: 0.92em;
+}
+
+/* ========== 18+ Age gate ========== */
+html.age-locked,
+html.age-locked body {
+  overflow: hidden !important;
+}
+
+html.age-locked .site-shell {
+  visibility: hidden !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+html.age-ok .site-shell {
+  visibility: visible;
+}
+
+.age-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background:
+    radial-gradient(800px 500px at 50% 30%, rgba(255, 45, 149, 0.18), transparent 60%),
+    rgba(5, 2, 10, 0.97);
+  backdrop-filter: blur(10px);
+}
+
+.age-gate[hidden] {
+  display: none !important;
+}
+
+.age-gate-card {
+  width: min(440px, 100%);
+  background: rgba(18, 8, 28, 0.95);
+  border: 1px solid rgba(255, 45, 149, 0.35);
+  border-radius: 20px;
+  padding: 1.75rem 1.5rem 1.4rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 40px rgba(255, 45, 149, 0.12);
+  text-align: center;
+}
+
+.age-gate-logo {
+  display: block;
+  margin: 0 auto 0.75rem;
+  border-radius: 12px;
+}
+
+.age-gate-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+
+.age-gate-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 4vw, 1.7rem);
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.age-gate-copy {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 0.65rem;
+  text-align: left;
+}
+
+.age-gate-copy.muted {
+  font-size: 0.86rem;
+  opacity: 0.9;
+}
+
+.age-gate-copy strong {
+  color: #ffd0e6;
+  font-weight: 600;
+}
+
+.age-gate-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 1.15rem 0 0.85rem;
+}
+
+.age-gate-fine {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  opacity: 0.85;
+}
+
+.age-gate-denied {
+  width: min(400px, 100%);
+  text-align: center;
+  padding: 2rem 1.25rem;
+}
+
+.age-gate-denied h2 {
+  font-family: var(--font-display);
+  margin-bottom: 0.5rem;
+}
+
+.age-gate-denied p {
+  color: var(--text-muted);
+}
+
+@media (min-width: 520px) {
+  .age-gate-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+  .age-gate-actions .btn {
+    flex: 1;
+  }
+}
+
 /* Utility */
 .sr-only {
   position: absolute;

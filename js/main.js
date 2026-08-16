@@ -13,17 +13,76 @@ const YOUTUBE_ORIGIN_HOST = 'stripclubempire.com';
 const LOCAL_GAMEPLAY_MP4 = ''; // e.g. 'assets/video/gameplay.mp4'
 
 document.addEventListener('DOMContentLoaded', () => {
-  initCursorGlow();
-  initHeader();
-  initMobileNav();
-  initMobileCta();
-  initSmoothScroll();
-  initReveal();
-  initCarousel();
-  initTrailerStub();
-  initExternalLinks();
-  initSteamCta();
+  initAgeGate(() => {
+    initCursorGlow();
+    initHeader();
+    initMobileNav();
+    initMobileCta();
+    initSmoothScroll();
+    initReveal();
+    initCarousel();
+    initTrailerStub();
+    initExternalLinks();
+    initSteamCta();
+  });
 });
+
+const AGE_KEY = 'sce_age_ok';
+
+function initAgeGate(onEnter) {
+  const root = document.documentElement;
+  const gate = document.getElementById('ageGate');
+  const denied = document.getElementById('ageGateDenied');
+  const enterBtn = document.getElementById('ageGateEnter');
+  const exitBtn = document.getElementById('ageGateExit');
+
+  const unlock = () => {
+    try { localStorage.setItem(AGE_KEY, '1'); } catch (e) { /* private mode */ }
+    root.classList.remove('age-locked');
+    root.classList.add('age-ok');
+    if (gate) {
+      gate.hidden = true;
+      gate.setAttribute('aria-hidden', 'true');
+    }
+    document.body.style.overflow = '';
+    if (typeof onEnter === 'function') onEnter();
+  };
+
+  let already = false;
+  try { already = localStorage.getItem(AGE_KEY) === '1'; } catch (e) { already = false; }
+
+  if (already) {
+    root.classList.remove('age-locked');
+    root.classList.add('age-ok');
+    if (gate) gate.hidden = true;
+    if (typeof onEnter === 'function') onEnter();
+    return;
+  }
+
+  // First visit: show gate, keep site shell inaccessible
+  root.classList.add('age-locked');
+  root.classList.remove('age-ok');
+  if (gate) {
+    gate.hidden = false;
+    gate.setAttribute('aria-hidden', 'false');
+  }
+  document.body.style.overflow = 'hidden';
+
+  if (enterBtn) {
+    enterBtn.addEventListener('click', unlock);
+  }
+  if (exitBtn) {
+    exitBtn.addEventListener('click', () => {
+      const card = gate && gate.querySelector('.age-gate-card');
+      if (card) card.hidden = true;
+      if (denied) {
+        denied.hidden = false;
+        denied.style.display = 'block';
+      }
+      // Do not unlock site or run interactive features
+    });
+  }
+}
 
 function initCursorGlow() {
   const glow = document.getElementById('cursorGlow');

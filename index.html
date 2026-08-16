@@ -18,13 +18,57 @@
   <meta name="twitter:description" content="Design the club. Run the night. Grow the empire. Coming to Steam Early Access.">
   <meta name="twitter:image" content="https://stripclubempire.com/assets/images/og-image.jpg">
   <meta name="theme-color" content="#07040c">
+  <meta name="rating" content="adult">
+  <meta name="robots" content="noimageai">
   <link rel="icon" type="image/png" href="assets/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Hide page chrome until age gate resolves (prevents flash of mature art)
+    (function () {
+      try {
+        if (localStorage.getItem('sce_age_ok') === '1') {
+          document.documentElement.classList.add('age-ok');
+        } else {
+          document.documentElement.classList.add('age-locked');
+        }
+      } catch (e) {
+        document.documentElement.classList.add('age-locked');
+      }
+    })();
+  </script>
 </head>
 <body>
+  <!-- 18+ age gate: blocks site content until confirmed -->
+  <div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="ageGateTitle" hidden>
+    <div class="age-gate-card">
+      <img src="assets/images/logo.png" alt="" class="age-gate-logo" width="64" height="64">
+      <p class="age-gate-kicker">Adults only</p>
+      <h1 class="age-gate-title" id="ageGateTitle">Are you 18 or older?</h1>
+      <p class="age-gate-copy">
+        Strip Club Empire is a mature (18+) management sim. This site includes
+        <strong>suggestive and topless club imagery</strong> and marketing screenshots.
+        Not a sex game — but <strong>not safe for kids</strong>.
+      </p>
+      <p class="age-gate-copy muted">
+        By entering you confirm you are at least 18 (or the age of majority where you live)
+        and want to view mature content.
+      </p>
+      <div class="age-gate-actions">
+        <button type="button" class="btn btn-primary btn-lg" id="ageGateEnter">I am 18+ — Enter</button>
+        <button type="button" class="btn btn-secondary btn-lg" id="ageGateExit">I am under 18 — Leave</button>
+      </div>
+      <p class="age-gate-fine">All characters depicted are adults. No real-money gambling.</p>
+    </div>
+    <div class="age-gate-denied" id="ageGateDenied" hidden>
+      <h2>Access denied</h2>
+      <p>This site is only for adults 18+. Please leave.</p>
+    </div>
+  </div>
+
+  <div class="site-shell" id="siteShell">
   <div class="ambient" aria-hidden="true"></div>
   <div class="noise" aria-hidden="true"></div>
   <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
@@ -221,7 +265,7 @@
     <section class="section" id="screenshots">
       <div class="container">
         <h2 class="section-title">Inside the Build</h2>
-        <p class="section-subtitle">In-progress captures from the live sim — systems first, art pass ongoing.</p>
+        <p class="section-subtitle">In-progress captures from the live sim — systems first, art pass ongoing. <span class="content-warn">May include topless / mature club content.</span></p>
 
         <div class="carousel" id="screenshotCarousel" data-autoplay="7000">
           <div class="carousel-viewport">
@@ -484,12 +528,13 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p class="mature-note">Mature (18+). Legal topless club content. Not a sex simulator. Anything illegal / sketchy gets the censor bar — that’s the gag too.</p>
-        <p>Single-player PC management sim. No real-money gambling. All characters are adults.</p>
+        <p class="mature-note">Mature (18+). This website and game include legal topless club content and suggestive imagery. Not a sex simulator. Anything illegal / sketchy gets the censor bar — that’s the gag too.</p>
+        <p>Intended audience: adults only. Single-player PC management sim. No real-money gambling. All characters are adults.</p>
         <p>&copy; 2026 Strip Club Empire / iCandy. All rights reserved.</p>
       </div>
     </div>
   </footer>
+  </div><!-- /.site-shell -->
 
   <script src="js/main.js"></script>
   <script src="js/email.js"></script>
