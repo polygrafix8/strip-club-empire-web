@@ -433,15 +433,15 @@
     <section class="section" id="wishlist">
       <div class="container">
         <div class="signup-wrapper">
-          <h2 class="section-title">Stay in the Loop</h2>
+          <h2 class="section-title">Wishlist on Steam</h2>
           <p class="signup-description">
-            Steam wishlist lands the moment the store page is public.
-            Until then, follow socials and drop your email for build notes, drops, and EA timing.
+            Store page is live. Wishlist now — Early Access is close.
+            Follow socials for build notes, chaos clips, and launch timing. 18+.
           </p>
 
           <div class="cta-group" style="margin-bottom: 1.25rem;">
-            <a class="btn btn-primary btn-lg" id="steamCta" href="#wishlist" aria-disabled="true" title="Steam page coming soon">
-              Steam Wishlist — Coming Soon
+            <a class="btn btn-primary btn-lg" id="steamCta" href="https://store.steampowered.com/app/4994860/Strip_Club_Empire/" target="_blank" rel="noopener" title="Open Steam store page">
+              Wishlist on Steam
             </a>
             <a class="btn btn-secondary btn-lg" href="https://www.facebook.com/stripclubempire/" target="_blank" rel="noopener">
               Facebook
@@ -453,12 +453,12 @@
 
           <form class="signup-form" id="emailForm" novalidate>
             <label class="sr-only" for="emailInput">Email address</label>
-            <input id="emailInput" type="email" name="email" placeholder="Email for launch updates" required autocomplete="email">
+            <input id="emailInput" type="email" name="email" placeholder="Email for launch updates (optional)" required autocomplete="email">
             <button type="submit" class="btn btn-primary">Notify Me</button>
           </form>
-          <p class="form-note"><small>Privacy respected. Unsubscribe anytime. 18+ audience.</small></p>
-          <div class="integration-note" id="emailNote">
-            <strong>Dev stub:</strong> wire email backend in <code>js/email.js</code>. Steam store URL goes in <code>STEAM_URL</code> (<code>js/main.js</code>).
+          <p class="form-note"><small>Privacy respected. Unsubscribe anytime. 18+ audience. Primary CTA is Steam wishlist.</small></p>
+          <div class="integration-note" id="emailNote" hidden>
+            Optional email backend: <code>js/email.js</code>.
           </div>
         </div>
       </div>

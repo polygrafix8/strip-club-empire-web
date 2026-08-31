@@ -4,7 +4,7 @@
  */
 
 // === CONFIG (swap these when live) ===
-const STEAM_URL = ''; // e.g. 'https://store.steampowered.com/app/XXXXX/Strip_Club_Empire/'
+const STEAM_URL = 'https://store.steampowered.com/app/4994860/Strip_Club_Empire/';
 const FACEBOOK_URL = 'https://www.facebook.com/stripclubempire/';
 const TWITTER_URL = 'https://x.com/stripclubempire';
 const YOUTUBE_VIDEO_ID = '2JXnBtyA3ig'; // sizzle; swap for gameplay trailer later
