@@ -1,0 +1,286 @@
+/* Strip Club Empire - Devlog page */
+
+/*
+ Home page uses .section { opacity:0 } + IntersectionObserver .visible.
+ Devlog packs ~40 chapters into one tall #chapters section, so the 0.12
+ threshold never fires (12% of a huge block can't fit the viewport) → blank scroll.
+ Force all devlog sections visible.
+*/
+.page-devlog .section {
+ opacity: 1 !important;
+ transform: none !important;
+}
+
+.page-devlog .dl-hero {
+ padding-top: calc(var( - header-h) + 2.5rem);
+}
+
+.page-devlog .dl-intro {
+ max-width: 46rem;
+ color: var( - text-muted);
+ margin-top: 1rem;
+}
+
+.page-devlog .dl-intro p {
+ margin-bottom: 0.85rem;
+}
+
+.dl-moments-wrap {
+ padding-top: 0;
+}
+
+.dl-moments {
+ background: var( - bg-card);
+ border: 1px solid var( - border);
+ border-radius: var( - radius-lg);
+ padding: var( - space-lg) var( - space-xl);
+ backdrop-filter: blur(10px);
+}
+
+.dl-moments h2 {
+ font-family: var( - font-display);
+ font-size: 1.35rem;
+ letter-spacing: 0.04em;
+ margin-bottom: 1rem;
+ color: var( - accent);
+}
+
+.dl-moments .dl-list {
+ columns: 1;
+}
+
+@media (min-width: 900px) {
+ .dl-moments .dl-list {
+ columns: 2;
+ column-gap: 2rem;
+ }
+}
+
+.dl-layout {
+ display: grid;
+ gap: 2rem;
+ align-items: start;
+}
+
+@media (min-width: 980px) {
+ .dl-layout {
+ grid-template-columns: 260px minmax(0, 1fr);
+ }
+}
+
+.dl-sidebar {
+ position: sticky;
+ top: calc(var( - header-h) + 1rem);
+}
+
+.dl-toc {
+ background: var( - bg-card);
+ border: 1px solid var( - border);
+ border-radius: var( - radius);
+ padding: 1rem 1.1rem 1.15rem;
+ max-height: min(58vh, 520px);
+ overflow: auto;
+ margin-bottom: 1rem;
+}
+
+.dl-toc-title {
+ font-size: 0.78rem;
+ text-transform: uppercase;
+ letter-spacing: 0.12em;
+ color: var( - text-muted);
+ margin-bottom: 0.65rem;
+ font-weight: 700;
+}
+
+.dl-toc ol {
+ list-style: none;
+ counter-reset: none;
+ margin: 0;
+ padding: 0;
+}
+
+.dl-toc li {
+ margin: 0;
+ padding: 0.28rem 0;
+ border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+ font-size: 0.82rem;
+ line-height: 1.35;
+}
+
+.dl-toc li:last-child {
+ border-bottom: 0;
+}
+
+.dl-toc a {
+ color: var( - text-muted);
+ text-decoration: none;
+}
+
+.dl-toc a:hover {
+ color: var( - primary-hover);
+}
+
+.dl-sticky-cta {
+ background: var( - bg-elevated);
+ border: 1px solid rgba(255, 45, 149, 0.25);
+ border-radius: var( - radius);
+ padding: 1rem;
+ display: grid;
+ gap: 0.55rem;
+}
+
+.dl-sticky-cta p {
+ font-size: 0.9rem;
+ color: var( - text-muted);
+ margin: 0 0 0.25rem;
+}
+
+.dl-feed-note {
+ color: var( - text-muted);
+ font-size: 0.92rem;
+ margin-bottom: 1.5rem;
+ padding: 0.75rem 1rem;
+ border-left: 3px solid var( - secondary);
+ background: rgba(177, 77, 255, 0.08);
+ border-radius: 0 var( - radius) var( - radius) 0;
+}
+
+.dl-entry {
+ background: var( - bg-card);
+ border: 1px solid var( - border);
+ border-radius: var( - radius-lg);
+ padding: 1.35rem 1.35rem 1.5rem;
+ margin-bottom: 1.5rem;
+ box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.dl-entry-head {
+ display: flex;
+ gap: 1rem;
+ justify-content: space-between;
+ align-items: flex-start;
+ margin-bottom: 1rem;
+ flex-wrap: wrap;
+}
+
+.dl-entry-head h2 {
+ font-family: var( - font-display);
+ font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+ letter-spacing: 0.02em;
+ line-height: 1.25;
+ margin: 0 0 0.35rem;
+}
+
+.dl-meta {
+ color: var( - cyan);
+ font-size: 0.86rem;
+ margin: 0;
+ opacity: 0.9;
+}
+
+.dl-gallery {
+ display: grid;
+ gap: 0.75rem;
+ margin: 0 0 1.15rem;
+}
+
+@media (min-width: 720px) {
+ .dl-gallery {
+ grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+ }
+}
+
+.dl-shot {
+ margin: 0;
+ background: #000;
+ border-radius: 12px;
+ overflow: hidden;
+ border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dl-shot img {
+ display: block;
+ width: 100%;
+ height: auto;
+ max-height: 320px;
+ object-fit: cover;
+ object-position: center top;
+}
+
+.dl-shot figcaption {
+ font-size: 0.72rem;
+ color: var( - text-muted);
+ padding: 0.4rem 0.55rem;
+ background: rgba(0, 0, 0, 0.55);
+}
+
+.dl-body p {
+ color: var( - text-muted);
+ margin-bottom: 0.85rem;
+}
+
+.dl-body p:last-child {
+ margin-bottom: 0;
+}
+
+.dl-subhead {
+ font-size: 0.95rem;
+ color: var( - accent);
+ margin: 1.15rem 0 0.55rem;
+ font-weight: 700;
+ letter-spacing: 0.02em;
+}
+
+.dl-list {
+ margin: 0 0 0.95rem;
+ padding-left: 1.15rem;
+ color: var( - text);
+}
+
+.dl-list li {
+ margin-bottom: 0.45rem;
+ color: var( - text-muted);
+}
+
+.dl-list li strong {
+ color: var( - text);
+}
+
+.dl-list code,
+.dl-body code {
+ font-size: 0.88em;
+ color: var( - cyan);
+ background: rgba(0, 240, 255, 0.08);
+ padding: 0.05em 0.3em;
+ border-radius: 4px;
+}
+
+.dl-endcard {
+ text-align: center;
+ padding: 2.5rem 1.5rem;
+ border: 1px dashed rgba(255, 45, 149, 0.35);
+ border-radius: var( - radius-lg);
+ background: linear-gradient(180deg, rgba(255, 45, 149, 0.08), rgba(177, 77, 255, 0.06));
+ margin-top: 1rem;
+}
+
+.dl-endcard h2 {
+ font-family: var( - font-display);
+ margin-bottom: 0.6rem;
+}
+
+.dl-endcard p {
+ color: var( - text-muted);
+ max-width: 34rem;
+ margin: 0 auto 1.25rem;
+}
+
+@media (max-width: 979px) {
+ .dl-sidebar {
+ position: static;
+ }
+
+ .dl-toc {
+ max-height: 220px;
+ }
+}
