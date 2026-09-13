@@ -97,7 +97,7 @@
         <p class="hero-tagline">build the club, manage the chaos - and write it down</p>
         <div class="dl-intro"><p>Strip Club Empire is a single-player management sim for PC, in the spirit of Two Point Hospital and Planet Coaster. You inherit your uncle&#x27;s run-down club, design the floor, hire and schedule the staff, and run the night in real time. Profit is balanced against the police. It is rated M: adult comedy, never graphic. The censor bar is the joke, and nothing under it exists.</p>
 <p>This log covers more than the 2026 sprint. The idea goes back to <strong>2013</strong>, with roots earlier than that: the designer worked the Vegas club floor in the early &#x27;90s and learned the business from the inside. Two later collab attempts stalled before <strong>2026</strong>, when AI-in-Unity finally made a solo build realistic. Day-by-day entries start there. <strong>Day 1 is July 9, 2026.</strong> Work often ran past midnight, so each day counts from when the work started. Failures stay in - a lot of what shipped came from finding out the plan was wrong. - -</p>
-<p>This is a public diary of progress and chaos - not a full design document or systems bible.</p></div>
+<p>This is a public diary of progress and chaos - not a full design document or systems bible. Day 1 is the first logged production day; a few unlogged setup days came first.</p></div>
         <div class="cta-group" style="margin-top:1.5rem">
           <a class="btn btn-primary btn-lg" href="https://store.steampowered.com/app/4994860/Strip_Club_Empire/" target="_blank" rel="noopener" data-steam-cta>Wishlist on Steam</a>
           <a class="btn btn-secondary btn-lg" href="#chapters">Read the diary</a>
@@ -607,20 +607,55 @@
     </div>
   </header>
   <div class="dl-body">
-    <p>The skeleton of the entire game went in. Everything was a capsule wearing a floating label, and everything worked end to end.</p><ul class="dl-list"><li><strong>The spine.</strong> One clock drives a 24-hour day, three shifts and a Tuesday-to-Saturday week that ends in a Sunday report.</li><li><strong>Design mode.</strong> A 72×80-tile canvas. Buy land with a brush, then place, rotate, move and sell furniture for a 50% refund. Starting cash was cash.</li><li><strong>Crowds and staff.</strong> Customers queue and pay at the door, watch the stage, tip, drink, use the restroom, get drunk (they turned green) and leave.</li><li><strong>Money and management.</strong> Every dollar is booked by type into a weekly ledger. The player&#x27;s manager is a character you click to move, with a radial menu wheel over anything you select.</li></ul><h3 class="dl-subhead">Along the way</h3><ul class="dl-list"><li>A queue whose tail landed on an unwalkable tile sent the pathfinding into an infinite loop that froze the editor outright.</li></ul>
+
+    <p>With the design doc locked and the production machine running, the skeleton of the whole game went in. Everything was still a capsule wearing a floating label - and end to end, it worked.</p>
+    <p><strong>No public screenshots here on purpose:</strong> the first real capture of the running game comes a day later. This entry is the gray-box proof that the plan could become a playable loop - clock, crowds, money, risk, office, saves - before art and polish caught up.</p>
+    <ul class="dl-list">
+      <li><strong>The spine.</strong> One clock drives the day and the week; design numbers live outside hard-coded chaos.</li>
+      <li><strong>Design mode.</strong> A floor you can buy, place, and rearrange.</li>
+      <li><strong>Crowds and staff.</strong> Door, stage, tips, drinks, posts.</li>
+      <li><strong>Money and management.</strong> A ledger, a manager you move, a radial menu.</li>
+      <li><strong>The first risk loop.</strong> Heat, raids, reputation.</li>
+      <li><strong>Saves, menus, a build.</strong> Enough to boot and keep a club.</li>
+    </ul>
+    <h3 class="dl-subhead">Along the way</h3>
+    <ul class="dl-list">
+      <li>Pathing and shutdown edge cases already showing their teeth - the pattern for the whole project: ship a loop, play it, let the failures write the next tasks.</li>
+    </ul>
+
   </div>
 </article>
 <article class="dl-entry reveal" id="before-day-1-july-3-5-origin-then-waking-the-project">
   <header class="dl-entry-head">
     <div class="dl-entry-titles">
       <h2>Before Day 1 (July 3–5) - Origin, then waking the project</h2>
-      <p class="dl-meta">July 3–5, 2026</p>
+      <p class="dl-meta">July 3–5, 2026 · Setup stretch before logged production</p>
     </div>
   </header>
   <div class="dl-gallery"><figure class="dl-shot"><img src="../assets/devlog/Office_cam2_overlay.jpg" alt="Before Day 1 (July 3–5) - Origin, then waking the project progress screenshot" loading="lazy" width="1400"><figcaption>Office_cam2_overlay.jpg</figcaption></figure><figure class="dl-shot"><img src="../assets/devlog/UI_Player_overview.jpg" alt="Before Day 1 (July 3–5) - Origin, then waking the project progress screenshot" loading="lazy" width="1400"><figcaption>UI_Player_overview.jpg</figcaption></figure><figure class="dl-shot"><img src="../assets/devlog/character_assembly.jpg" alt="Before Day 1 (July 3–5) - Origin, then waking the project progress screenshot" loading="lazy" width="1400"><figcaption>character_assembly.jpg</figcaption></figure></div>
   <div class="dl-body">
-    <p>The club is older than this diary&#x27;s Day 1. <strong>Why this game.</strong> In the early 1990s the designer worked as one of the original male dancers at the Olympic Garden in Las Vegas. Knowing the owners and the house manager meant seeing how a real club runs - door, floor, staff, money, and chaos - not just the stage. That first-hand floor is the inspiration under the systems comedy. <strong>The long road.</strong></p>
-<ul class="dl-list"><li><strong>2013.</strong> High-concept design doc. Other projects win; no full design yet.</li><li><strong>2016.</strong> Spare-time collab with a the engine programmer from a shared Sunstorm Interactive past. Modular rooms, labeled static cast, UI concepts, and a character-assembly approach aimed at variety. About two months, mostly design and art on the designer&#x27;s side; programmer steps away; hold.</li><li><strong>2019–2021.</strong> At United Power in Las Vegas (art lead), meets programmer Mike Marshalvic. 2021 revive: tighter GDD, more assets, the engine project, early navigation. Scope and unpaid risk kill momentum.</li><li><strong>2026.</strong> AI wired into the engine hard enough for a real solo attempt. That attempt is this log. What July 2026 inherits is not a blank folder - modular room art, assembly thinking, UI concepts, prior the engine attempts, and whatever still ran. First job: modern engine, playable end to end.</li></ul><ul class="dl-list"><li>Brought the inherited project onto a modern engine and pushed toward a club you can actually run end to end.</li></ul>
+
+    <p>The club is older than this diary's Day 1. The idea and early art go back years. What this stretch actually was, though, was <strong>getting ready to build</strong>.</p>
+    <p>Before the numbered production days, there was a quiet stretch of setup - closer to <strong>five days than three</strong>, even though nothing was logged yet.</p>
+    <p>The design document got a serious pass: refine, let AI poke holes in it, fix the holes, refine again, until it was solid enough to be the <strong>first thing fed into Claude for the game</strong>. The AI needed a skeleton to build from, and that doc was it.</p>
+    <p>At the same time the environment came together: Claude, Unity, the MCP bridge between them, GitHub, and a long-form development plan worked out with the chat side of Claude. That plan was waterfall in shape - milestones made of task groups labeled T-01, T-02, and on - aimed at carrying the project to a finished game.</p>
+    <h3 class="dl-subhead">The working loop (waterfall + agile)</h3>
+    <ul class="dl-list">
+      <li><strong>Chat Claude</strong> kept the big picture (ideally one long thread; in practice about <strong>six long sessions</strong> so far).</li>
+      <li>It wrote the prompts for each mini-milestone.</li>
+      <li>Those prompts went into <strong>Claude Code</strong> to do the work (<strong>300+ short task-group sessions</strong> so far).</li>
+      <li>After each batch: playtest, notes, back to chat Claude to adjust the next tasks or write new ones.</li>
+    </ul>
+    <p>Only once that machine was running did <strong>Day 1</strong> begin - the first logged production tasks.</p>
+    <h3 class="dl-subhead">Where the bones came from</h3>
+    <ul class="dl-list">
+      <li><strong>Early '90s inspiration.</strong> Real Vegas club floor experience under the systems comedy.</li>
+      <li><strong>2013.</strong> High-concept design doc; other projects win.</li>
+      <li><strong>2016.</strong> Spare-time collab; modular rooms, labeled cast, UI concepts, character assembly; hold.</li>
+      <li><strong>2019–2021.</strong> Revive attempt; scope and unpaid risk kill momentum.</li>
+      <li><strong>2026.</strong> AI in the loop hard enough for a real solo attempt - after this setup stretch, production starts.</li>
+    </ul>
+
   </div>
 </article>
           <div class="dl-endcard">
