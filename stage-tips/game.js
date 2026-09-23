@@ -113,7 +113,7 @@
       return;
     }
     var side = reachSide || 'right';
-    floaters[side].grabUntil = performance.now() + 90;
+    floaters[side].grabUntil = performance.now() + 200;
     var pitch = 520 + Math.min(hit.combo, 8) * 48 + (hit.id === '100' ? 180 : 0);
     tone(pitch, 0.09, 'triangle', 0.06);
     burst(hit.x, hit.y, hit.id === '100' ? '#ff2d95' : '#ffc857', hit.id === '100' ? 18 : 8);
@@ -332,13 +332,13 @@
     dy = f.ey - f.y;
     ang = Math.atan2(dy, dx);
     hw = Math.max(76, cssW * 0.091);
-    fw = hw * 0.42;
-    len = hw * 1.7;
+    fw = hw * 0.504;
+    len = hw * 2.04;
     inset = fw * 0.2;
     sprite = (f.grabUntil && performance.now() < f.grabUntil) ? grabImg : handImg;
-    wristFrac = sprite === grabImg ? 0.785 : 0.88;
+    wristFrac = sprite === grabImg ? 0.838 : 0.88;
     if (sprite === grabImg) {
-      hw *= (0.88 * handImg.height / handImg.width) / (0.785 * grabImg.height / grabImg.width);
+      hw *= 0.418 / 0.441;
     }
     hh = hw * (sprite.height / sprite.width);
     ctx.save();
