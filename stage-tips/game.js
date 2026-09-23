@@ -308,7 +308,7 @@
     vx = f.x - f.ex;
     vy = f.y - f.ey;
     dist = Math.hypot(vx, vy) || 1;
-    len = Math.max(130, Math.min(230, cssH * 0.3));
+    len = Math.max(120, cssW * 0.16);
     wantX = f.x - vx / dist * len;
     wantY = f.y - vy / dist * len;
     tailK = 1 - Math.pow(0.28, Math.max(dt, 0.001));
@@ -331,13 +331,16 @@
     dx = f.ex - f.x;
     dy = f.ey - f.y;
     ang = Math.atan2(dy, dx);
-    len = Math.max(80, Math.hypot(dx, dy));
-    fw = Math.max(42, len * 0.32);
-    sprite = (f.grabUntil && performance.now() < f.grabUntil) ? grabImg : handImg;
-    wristFrac = sprite === grabImg ? 0.86 : 0.88;
     hw = Math.max(76, cssW * 0.091);
+    fw = hw * 0.42;
+    len = hw * 1.7;
+    inset = fw * 0.2;
+    sprite = (f.grabUntil && performance.now() < f.grabUntil) ? grabImg : handImg;
+    wristFrac = sprite === grabImg ? 0.785 : 0.88;
+    if (sprite === grabImg) {
+      hw *= (0.88 * handImg.height / handImg.width) / (0.785 * grabImg.height / grabImg.width);
+    }
     hh = hw * (sprite.height / sprite.width);
-    inset = Math.max(8, fw * 0.22);
     ctx.save();
     ctx.translate(f.x, f.y);
     ctx.rotate(ang - Math.PI / 2);
