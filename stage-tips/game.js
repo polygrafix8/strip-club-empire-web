@@ -283,7 +283,7 @@
   grabImg.onload = function () { spritesReady += 1; };
   forearmImg.onload = function () { spritesReady += 1; };
   handImg.src = 'hand.png';
-  grabImg.src = 'hand-grab.png';
+  grabImg.src = 'hand-grab.png?v=knuckle';
   forearmImg.src = 'forearm.png';
 
   function stepFloater(f, tx, ty, dt) {
@@ -336,9 +336,9 @@
     len = hw * 2.04;
     inset = fw * 0.2;
     sprite = (f.grabUntil && performance.now() < f.grabUntil) ? grabImg : handImg;
-    wristFrac = sprite === grabImg ? 0.838 : 0.88;
+    wristFrac = sprite === grabImg ? 0.894 : 0.88;
     if (sprite === grabImg) {
-      hw *= 0.418 / 0.441;
+      hw *= 0.418 / 0.385;
     }
     hh = hw * (sprite.height / sprite.width);
     ctx.save();
@@ -645,9 +645,10 @@
   document.getElementById('shareBtn').addEventListener('click', function () {
     var text = 'I caught ' + money(match ? match.cash : 0) + ' in tips! Can you beat my score?';
     var page = 'https://stripclubempire.com/stage-tips/';
+    var post = text + ' ' + page;
     var sheet = document.getElementById('shareSheet');
-    document.getElementById('sharePreview').textContent = text;
-    document.getElementById('shareX').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(page);
+    document.getElementById('sharePreview').textContent = post;
+    document.getElementById('shareX').href = 'https://x.com/intent/post?text=' + encodeURIComponent(post);
     document.getElementById('shareFb').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(page) + '&quote=' + encodeURIComponent(text);
     document.getElementById('shareReddit').href = 'https://www.reddit.com/submit?url=' + encodeURIComponent(page) + '&title=' + encodeURIComponent(text);
     sheet.hidden = false;
