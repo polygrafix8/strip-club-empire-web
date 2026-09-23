@@ -34,6 +34,10 @@
   var muted = false;
   var reduced = false;
   var idleBills = [];
+  var bgImg = new Image();
+  var bgOk = false;
+  bgImg.onload = function () { bgOk = true; };
+  bgImg.src = 'bg.jpg';
 
   try {
     muted = localStorage.getItem(MUTE_KEY) === '1';
@@ -153,12 +157,28 @@
   }
 
   function drawClub(time) {
-    var g = ctx.createLinearGradient(0, 0, 0, cssH);
+    var g;
     var y;
     var n;
     var i;
     var x;
     var bob;
+    var scale;
+    var dw;
+    var dh;
+    if (bgOk && bgImg.width) {
+      scale = Math.max(cssW / bgImg.width, cssH / bgImg.height);
+      dw = bgImg.width * scale;
+      dh = bgImg.height * scale;
+      ctx.drawImage(bgImg, (cssW - dw) / 2, (cssH - dh) / 2, dw, dh);
+      g = ctx.createLinearGradient(0, cssH * 0.72, 0, cssH);
+      g.addColorStop(0, 'rgba(0,0,0,0)');
+      g.addColorStop(1, 'rgba(0,0,0,0.28)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, cssW, cssH);
+      return;
+    }
+    g = ctx.createLinearGradient(0, 0, 0, cssH);
     g.addColorStop(0, '#241036');
     g.addColorStop(0.55, '#140818');
     g.addColorStop(1, '#07040c');
@@ -188,24 +208,22 @@
   }
 
   function drawBill(it) {
-    var colors = { '1': '#1f8a4c', '5': '#178a55', '20': '#d4a017', '100': '#ff2d95' };
-    var w = it.radius * 1.65;
-    var h = it.radius * 0.92;
+    var colors = { '1': '#1f8a4c', '5': '#178a55', '20': '#d4a017', '100': '#c45cff' };
+    var w = it.radius * 1.7;
+    var h = it.radius * 0.95;
     ctx.save();
     ctx.translate(it.x, it.y);
     ctx.rotate(Math.sin(it.rot) * 0.35);
-    ctx.fillStyle = 'rgba(255, 200, 87, 0.28)';
-    ctx.beginPath();
-    ctx.arc(0, 0, it.radius + 8, 0, Math.PI * 2);
-    ctx.fill();
-    roundRect(-w / 2, -h / 2, w, h, 7);
+    roundRect(-w / 2, -h / 2, w, h, 5);
     ctx.fillStyle = colors[it.type] || '#1f8a4c';
     ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,0.75)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.8)';
     ctx.lineWidth = 2;
     ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+    ctx.strokeRect(-w / 2 + 4, -h / 2 + 4, w - 8, h - 8);
     ctx.fillStyle = '#fff';
-    ctx.font = '800 ' + Math.max(16, Math.floor(it.radius * 0.62)) + 'px Inter, sans-serif';
+    ctx.font = '800 ' + Math.max(16, Math.floor(it.radius * 0.58)) + 'px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('$' + it.type, 0, 1);
@@ -215,82 +233,151 @@
   function drawJunk(it) {
     ctx.save();
     ctx.translate(it.x, it.y);
-    ctx.rotate(it.rot * 0.4);
-    ctx.strokeStyle = 'rgba(255, 70, 90, 0.9)';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.arc(0, 0, it.radius + 2, 0, Math.PI * 2);
-    ctx.stroke();
+    ctx.rotate(it.rot * 0.25);
+    ctx.scale(1.35, 1.35);
     if (it.type === 'beer') {
+      ctx.fillStyle = '#c9a06a';
+      ctx.fillRect(-5, -20, 10, 8);
       ctx.fillStyle = '#6d3b16';
-      roundRect(-9, -4, 18, 30, 5);
+      roundRect(-10, -12, 20, 32, 6);
       ctx.fill();
-      ctx.fillStyle = '#e7d7a1';
-      ctx.fillRect(-6, -16, 12, 14);
-      ctx.fillStyle = '#9be7ff';
-      ctx.fillRect(-7, 4, 14, 8);
+      ctx.fillStyle = '#f2e2b0';
+      ctx.fillRect(-8, -2, 16, 10);
     } else if (it.type === 'heel') {
       ctx.fillStyle = '#ff4f9a';
       ctx.beginPath();
-      ctx.moveTo(-16, 6);
-      ctx.lineTo(14, 2);
-      ctx.lineTo(8, 12);
-      ctx.lineTo(-12, 12);
+      ctx.moveTo(-18, 4);
+      ctx.quadraticCurveTo(0, -8, 16, 0);
+      ctx.lineTo(10, 10);
+      ctx.lineTo(-14, 10);
       ctx.closePath();
       ctx.fill();
-      ctx.fillRect(8, 2, 4, 18);
+      ctx.fillRect(10, 0, 5, 20);
+      ctx.beginPath();
+      ctx.ellipse(12, 20, 7, 3, 0, 0, Math.PI * 2);
+      ctx.fill();
     } else {
       ctx.fillStyle = '#1b1b22';
-      roundRect(-12, -18, 24, 36, 4);
+      roundRect(-13, -20, 26, 40, 5);
       ctx.fill();
       ctx.fillStyle = '#7af0ff';
-      ctx.fillRect(-8, -12, 16, 22);
+      roundRect(-9, -14, 18, 24, 2);
+      ctx.fill();
     }
-    ctx.fillStyle = '#fff';
-    ctx.font = '700 10px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(it.type.toUpperCase(), 0, it.radius + 14);
     ctx.restore();
   }
 
-  function drawArm() {
-    var hx;
-    var hy;
-    var sx;
-    var sy;
-    var cx;
-    var cy;
-    if (mode === 'over') return;
-    hx = arm.x;
-    hy = arm.y;
-    sx = cssW + 30;
-    sy = cssH * 0.94;
-    cx = hx + (sx - hx) * 0.45;
-    cy = hy + (sy - hy) * 0.35 + 20;
-    ctx.save();
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = '#e8b896';
-    ctx.lineWidth = 28;
+  function limb(ax, ay, bx, by, w0, w1, fill) {
+    var ang = Math.atan2(by - ay, bx - ax);
+    var px = Math.cos(ang + Math.PI / 2);
+    var py = Math.sin(ang + Math.PI / 2);
     ctx.beginPath();
-    ctx.moveTo(sx, sy);
-    ctx.quadraticCurveTo(cx, cy, hx, hy);
-    ctx.stroke();
-    ctx.strokeStyle = '#ffc857';
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.arc(hx + (sx - hx) * 0.16, hy + (sy - hy) * 0.16, 15, 0.4, 2.6);
-    ctx.stroke();
-    ctx.fillStyle = '#e8b896';
-    ctx.beginPath();
-    ctx.arc(hx, hy, 16, 0, Math.PI * 2);
+    ctx.moveTo(ax + px * w0, ay + py * w0);
+    ctx.lineTo(bx + px * w1, by + py * w1);
+    ctx.lineTo(bx - px * w1, by - py * w1);
+    ctx.lineTo(ax - px * w0, ay - py * w0);
+    ctx.closePath();
+    ctx.fillStyle = fill;
     ctx.fill();
+  }
+
+  function solveElbow(sx, sy, tx, ty, upper, lower, bendSign) {
+    var dx = tx - sx;
+    var dy = ty - sy;
+    var dist = Math.hypot(dx, dy) || 1;
+    var max = upper + lower - 6;
+    var min = Math.abs(upper - lower) + 8;
+    var nx = tx;
+    var ny = ty;
+    if (dist > max) {
+      nx = sx + dx / dist * max;
+      ny = sy + dy / dist * max;
+      dist = max;
+    } else if (dist < min) {
+      nx = sx + dx / dist * min;
+      ny = sy + dy / dist * min;
+      dist = min;
+    }
+    var ang = Math.atan2(ny - sy, nx - sx);
+    var cosA = (upper * upper + dist * dist - lower * lower) / (2 * upper * dist);
+    cosA = Math.max(-1, Math.min(1, cosA));
+    var elbowAng = ang + bendSign * Math.acos(cosA);
+    var ex = sx + Math.cos(elbowAng) * upper;
+    var ey = sy + Math.sin(elbowAng) * upper;
+    return { ex: ex, ey: ey, hx: nx, hy: ny, ang: Math.atan2(ny - ey, nx - ex) };
+  }
+
+  function drawHand(x, y, ang) {
+    var i;
+    var fx;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(ang);
+    ctx.fillStyle = '#f0c4a4';
+    ctx.beginPath();
+    ctx.ellipse(0, 2, 15, 11, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#e7b08a';
+    for (i = 0; i < 4; i++) {
+      fx = -11 + i * 7;
+      limb(fx, -6, fx + (i - 1.5) * 1.2, -24, 3.4, 2.4, '#f0c4a4');
+      ctx.fillStyle = '#ff2d95';
+      ctx.beginPath();
+      ctx.ellipse(fx + (i - 1.5) * 1.2, -25, 2.3, 3.1, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#e7b08a';
+    }
+    limb(-16, 4, -24, -6, 3.2, 2.2, '#f0c4a4');
     ctx.fillStyle = '#ff2d95';
     ctx.beginPath();
-    ctx.ellipse(hx - 8, hy - 14, 3, 5, -0.4, 0, Math.PI * 2);
-    ctx.ellipse(hx, hy - 16, 3, 5.2, 0, 0, Math.PI * 2);
-    ctx.ellipse(hx + 8, hy - 14, 3, 5, 0.4, 0, Math.PI * 2);
+    ctx.ellipse(-25, -7, 2.2, 2.8, -0.6, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
+  }
+
+  function drawOneArm(sx, sy, tx, ty, bendSign) {
+    var upper = Math.max(78, cssH * 0.22);
+    var lower = Math.max(70, cssH * 0.2);
+    var pose = solveElbow(sx, sy, tx, ty, upper, lower, bendSign);
+    limb(sx, sy, pose.ex, pose.ey, 16, 12, '#e2b08a');
+    limb(sx + 2, sy, pose.ex, pose.ey, 7, 5, 'rgba(255, 220, 190, 0.28)');
+    ctx.fillStyle = '#d9a484';
+    ctx.beginPath();
+    ctx.arc(pose.ex, pose.ey, 11, 0, Math.PI * 2);
+    ctx.fill();
+    limb(pose.ex, pose.ey, pose.hx, pose.hy, 11, 7, '#e8b896');
+    limb(pose.ex, pose.ey, pose.hx, pose.hy, 4, 2.5, 'rgba(255, 228, 206, 0.35)');
+    ctx.strokeStyle = '#ffc857';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(pose.hx - Math.cos(pose.ang) * 14, pose.hy - Math.sin(pose.ang) * 14, 8, pose.ang - 1.2, pose.ang + 1.2);
+    ctx.stroke();
+    drawHand(pose.hx, pose.hy, pose.ang);
+  }
+
+  function drawArm() {
+    var leftX;
+    var rightX;
+    var leftY;
+    var rightY;
+    var useLeft;
+    if (mode === 'over') return;
+    leftX = cssW * 0.2;
+    rightX = cssW * 0.8;
+    leftY = cssH * 0.78;
+    rightY = cssH * 0.78;
+    if (arm.on) {
+      useLeft = Math.abs(arm.x - leftX) <= Math.abs(arm.x - rightX);
+      if (useLeft) {
+        leftX = arm.x;
+        leftY = arm.y;
+      } else {
+        rightX = arm.x;
+        rightY = arm.y;
+      }
+    }
+    drawOneArm(cssW * 0.3, cssH + 36, leftX, leftY, -1);
+    drawOneArm(cssW * 0.7, cssH + 36, rightX, rightY, 1);
   }
 
   function drawTrail() {
