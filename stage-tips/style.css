@@ -282,8 +282,19 @@ canvas {
 
 .best-note { color: var(--gold) !important; font-weight: 700; }
 
-.copy-note {
-  min-height: 1.2em;
-  font-size: 13px;
-  color: var(--gold) !important;
+.share-sheet {
+  margin-top: 12px;
+  text-align: left;
+}
+
+.share-preview {
+  color: var(--text) !important;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.share-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }

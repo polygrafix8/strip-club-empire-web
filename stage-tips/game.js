@@ -267,117 +267,97 @@
     ctx.restore();
   }
 
-  function limb(ax, ay, bx, by, w0, w1, fill) {
-    var ang = Math.atan2(by - ay, bx - ax);
-    var px = Math.cos(ang + Math.PI / 2);
-    var py = Math.sin(ang + Math.PI / 2);
-    ctx.beginPath();
-    ctx.moveTo(ax + px * w0, ay + py * w0);
-    ctx.lineTo(bx + px * w1, by + py * w1);
-    ctx.lineTo(bx - px * w1, by - py * w1);
-    ctx.lineTo(ax - px * w0, ay - py * w0);
-    ctx.closePath();
-    ctx.fillStyle = fill;
-    ctx.fill();
-  }
+  var frameDt = 0.016;
+  var handImg = new Image();
+  var forearmImg = new Image();
+  var spritesReady = 0;
+  var floaters = {
+    left: { x: 0, y: 0, ex: 0, ey: 0, init: false },
+    right: { x: 0, y: 0, ex: 0, ey: 0, init: false }
+  };
+  handImg.onload = function () { spritesReady += 1; };
+  forearmImg.onload = function () { spritesReady += 1; };
+  handImg.src = 'hand.png';
+  forearmImg.src = 'forearm.png';
 
-  function solveElbow(sx, sy, tx, ty, upper, lower, bendSign) {
-    var dx = tx - sx;
-    var dy = ty - sy;
-    var dist = Math.hypot(dx, dy) || 1;
-    var max = upper + lower - 6;
-    var min = Math.abs(upper - lower) + 8;
-    var nx = tx;
-    var ny = ty;
-    if (dist > max) {
-      nx = sx + dx / dist * max;
-      ny = sy + dy / dist * max;
-      dist = max;
-    } else if (dist < min) {
-      nx = sx + dx / dist * min;
-      ny = sy + dy / dist * min;
-      dist = min;
+  function stepFloater(f, tx, ty, dt) {
+    var len;
+    var vx;
+    var vy;
+    var dist;
+    var wantX;
+    var wantY;
+    var handK;
+    var tailK;
+    if (!f.init) {
+      f.x = tx;
+      f.y = ty;
+      f.ex = tx;
+      f.ey = ty + 150;
+      f.init = true;
     }
-    var ang = Math.atan2(ny - sy, nx - sx);
-    var cosA = (upper * upper + dist * dist - lower * lower) / (2 * upper * dist);
-    cosA = Math.max(-1, Math.min(1, cosA));
-    var elbowAng = ang + bendSign * Math.acos(cosA);
-    var ex = sx + Math.cos(elbowAng) * upper;
-    var ey = sy + Math.sin(elbowAng) * upper;
-    return { ex: ex, ey: ey, hx: nx, hy: ny, ang: Math.atan2(ny - ey, nx - ex) };
+    handK = 1 - Math.pow(0.004, Math.max(dt, 0.001));
+    f.x += (tx - f.x) * Math.min(1, handK);
+    f.y += (ty - f.y) * Math.min(1, handK);
+    vx = f.x - f.ex;
+    vy = f.y - f.ey;
+    dist = Math.hypot(vx, vy) || 1;
+    len = Math.max(130, Math.min(230, cssH * 0.3));
+    wantX = f.x - vx / dist * len;
+    wantY = f.y - vy / dist * len;
+    tailK = 1 - Math.pow(0.28, Math.max(dt, 0.001));
+    f.ex += (wantX - f.ex) * Math.min(1, tailK);
+    f.ey += (wantY - f.ey) * Math.min(1, tailK);
   }
 
-  function drawHand(x, y, ang) {
-    var i;
-    var fx;
+  function drawFloater(f, mirror) {
+    var dx;
+    var dy;
+    var ang;
+    var len;
+    var fw;
+    var hw;
+    var hh;
+    if (spritesReady < 2) return;
+    dx = f.ex - f.x;
+    dy = f.ey - f.y;
+    ang = Math.atan2(dy, dx);
+    len = Math.max(80, Math.hypot(dx, dy));
+    fw = Math.max(46, len * 0.34);
     ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(ang);
-    ctx.fillStyle = '#f0c4a4';
-    ctx.beginPath();
-    ctx.ellipse(0, 2, 15, 11, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#e7b08a';
-    for (i = 0; i < 4; i++) {
-      fx = -11 + i * 7;
-      limb(fx, -6, fx + (i - 1.5) * 1.2, -24, 3.4, 2.4, '#f0c4a4');
-      ctx.fillStyle = '#ff2d95';
-      ctx.beginPath();
-      ctx.ellipse(fx + (i - 1.5) * 1.2, -25, 2.3, 3.1, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#e7b08a';
-    }
-    limb(-16, 4, -24, -6, 3.2, 2.2, '#f0c4a4');
-    ctx.fillStyle = '#ff2d95';
-    ctx.beginPath();
-    ctx.ellipse(-25, -7, 2.2, 2.8, -0.6, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.translate(f.x, f.y);
+    ctx.rotate(ang - Math.PI / 2);
+    ctx.drawImage(forearmImg, -fw / 2, -28, fw, len + 28);
+    hw = Math.max(108, cssW * 0.13);
+    hh = hw * (handImg.height / handImg.width);
+    ctx.scale(mirror ? -1 : 1, 1);
+    ctx.drawImage(handImg, -hw / 2, -hh + hw * 0.22, hw, hh);
     ctx.restore();
   }
 
-  function drawOneArm(sx, sy, tx, ty, bendSign) {
-    var upper = Math.max(78, cssH * 0.22);
-    var lower = Math.max(70, cssH * 0.2);
-    var pose = solveElbow(sx, sy, tx, ty, upper, lower, bendSign);
-    limb(sx, sy, pose.ex, pose.ey, 16, 12, '#e2b08a');
-    limb(sx + 2, sy, pose.ex, pose.ey, 7, 5, 'rgba(255, 220, 190, 0.28)');
-    ctx.fillStyle = '#d9a484';
-    ctx.beginPath();
-    ctx.arc(pose.ex, pose.ey, 11, 0, Math.PI * 2);
-    ctx.fill();
-    limb(pose.ex, pose.ey, pose.hx, pose.hy, 11, 7, '#e8b896');
-    limb(pose.ex, pose.ey, pose.hx, pose.hy, 4, 2.5, 'rgba(255, 228, 206, 0.35)');
-    ctx.strokeStyle = '#ffc857';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.arc(pose.hx - Math.cos(pose.ang) * 14, pose.hy - Math.sin(pose.ang) * 14, 8, pose.ang - 1.2, pose.ang + 1.2);
-    ctx.stroke();
-    drawHand(pose.hx, pose.hy, pose.ang);
-  }
-
   function drawArm() {
-    var leftX;
-    var rightX;
-    var leftY;
-    var rightY;
+    var now;
+    var leftTarget;
+    var rightTarget;
     var useLeft;
     if (mode === 'over') return;
-    leftX = cssW * 0.2;
-    rightX = cssW * 0.8;
-    leftY = cssH * 0.78;
-    rightY = cssH * 0.78;
+    now = performance.now();
+    leftTarget = { x: cssW * 0.28, y: cssH * 0.58 + Math.sin(now / 800) * 18 };
+    rightTarget = { x: cssW * 0.72, y: cssH * 0.54 + Math.cos(now / 900) * 16 };
     if (arm.on) {
-      useLeft = Math.abs(arm.x - leftX) <= Math.abs(arm.x - rightX);
+      useLeft = Math.abs(arm.x - leftTarget.x) <= Math.abs(arm.x - rightTarget.x);
       if (useLeft) {
-        leftX = arm.x;
-        leftY = arm.y;
+        leftTarget.x = arm.x;
+        leftTarget.y = arm.y;
       } else {
-        rightX = arm.x;
-        rightY = arm.y;
+        rightTarget.x = arm.x;
+        rightTarget.y = arm.y;
       }
     }
-    drawOneArm(cssW * 0.3, cssH + 36, leftX, leftY, -1);
-    drawOneArm(cssW * 0.7, cssH + 36, rightX, rightY, 1);
+    stepFloater(floaters.left, leftTarget.x, leftTarget.y, frameDt);
+    stepFloater(floaters.right, rightTarget.x, rightTarget.y, frameDt);
+    drawFloater(floaters.left, true);
+    drawFloater(floaters.right, false);
   }
 
   function drawTrail() {
@@ -530,9 +510,9 @@
     trail = [];
     startOverlay.hidden = true;
     endOverlay.hidden = true;
+    document.getElementById('shareSheet').hidden = true;
     hud.hidden = false;
     muteBtn.hidden = false;
-    copyNote.textContent = '';
     if (!muted) tone(330, 0.12, 'sine', 0.04, 520);
     syncHud();
   }
@@ -606,6 +586,7 @@
       if (match.over) finish();
     }
     if (shake > 0) shake = Math.max(0, shake - dt * 28);
+    frameDt = dt;
     if (!arm.on) {
       arm.x = cssW * 0.9 + Math.sin(ts / 700) * 12;
       arm.y = cssH * 0.74 + Math.cos(ts / 900) * 8;
@@ -645,17 +626,15 @@
     if (!muted) unlockAudio();
   });
   muteBtn.textContent = muted ? 'Sound off' : 'Sound on';
-  document.getElementById('copyBtn').addEventListener('click', function () {
-    var text = 'I caught ' + money(match ? match.cash : 0) + ' in Stage Tips. https://stripclubempire.com/stage-tips/';
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(function () {
-        copyNote.textContent = 'Copied.';
-      }).catch(function () {
-        copyNote.textContent = text;
-      });
-    } else {
-      copyNote.textContent = text;
-    }
+  document.getElementById('shareBtn').addEventListener('click', function () {
+    var text = 'I caught ' + money(match ? match.cash : 0) + ' in tips! Can you beat my score?';
+    var page = 'https://stripclubempire.com/stage-tips/';
+    var sheet = document.getElementById('shareSheet');
+    document.getElementById('sharePreview').textContent = text;
+    document.getElementById('shareX').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(page);
+    document.getElementById('shareFb').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(page) + '&quote=' + encodeURIComponent(text);
+    document.getElementById('shareReddit').href = 'https://www.reddit.com/submit?url=' + encodeURIComponent(page) + '&title=' + encodeURIComponent(text);
+    sheet.hidden = false;
   });
 
   canvas.addEventListener('pointerdown', onPointerDown);
