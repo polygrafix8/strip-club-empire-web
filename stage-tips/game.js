@@ -112,6 +112,8 @@
       burst(hit.x, hit.y, '#ff4d6d', 14);
       return;
     }
+    var side = reachSide || 'right';
+    floaters[side].grabUntil = performance.now() + 90;
     var pitch = 520 + Math.min(hit.combo, 8) * 48 + (hit.id === '100' ? 180 : 0);
     tone(pitch, 0.09, 'triangle', 0.06);
     burst(hit.x, hit.y, hit.id === '100' ? '#ff2d95' : '#ffc857', hit.id === '100' ? 18 : 8);
@@ -268,16 +270,20 @@
   }
 
   var frameDt = 0.016;
+  var reachSide = 'right';
   var handImg = new Image();
+  var grabImg = new Image();
   var forearmImg = new Image();
   var spritesReady = 0;
   var floaters = {
-    left: { x: 0, y: 0, ex: 0, ey: 0, init: false },
-    right: { x: 0, y: 0, ex: 0, ey: 0, init: false }
+    left: { x: 0, y: 0, ex: 0, ey: 0, init: false, grabUntil: 0 },
+    right: { x: 0, y: 0, ex: 0, ey: 0, init: false, grabUntil: 0 }
   };
   handImg.onload = function () { spritesReady += 1; };
+  grabImg.onload = function () { spritesReady += 1; };
   forearmImg.onload = function () { spritesReady += 1; };
   handImg.src = 'hand.png';
+  grabImg.src = 'hand-grab.png';
   forearmImg.src = 'forearm.png';
 
   function stepFloater(f, tx, ty, dt) {
@@ -318,20 +324,26 @@
     var fw;
     var hw;
     var hh;
-    if (spritesReady < 2) return;
+    var sprite;
+    var wristFrac;
+    var inset;
+    if (spritesReady < 3) return;
     dx = f.ex - f.x;
     dy = f.ey - f.y;
     ang = Math.atan2(dy, dx);
     len = Math.max(80, Math.hypot(dx, dy));
-    fw = Math.max(46, len * 0.34);
+    fw = Math.max(42, len * 0.32);
+    sprite = (f.grabUntil && performance.now() < f.grabUntil) ? grabImg : handImg;
+    wristFrac = sprite === grabImg ? 0.86 : 0.88;
+    hw = Math.max(76, cssW * 0.091);
+    hh = hw * (sprite.height / sprite.width);
+    inset = Math.max(8, fw * 0.22);
     ctx.save();
     ctx.translate(f.x, f.y);
     ctx.rotate(ang - Math.PI / 2);
-    ctx.drawImage(forearmImg, -fw / 2, -28, fw, len + 28);
-    hw = Math.max(108, cssW * 0.13);
-    hh = hw * (handImg.height / handImg.width);
+    ctx.drawImage(forearmImg, -fw / 2, -inset, fw, len + inset);
     ctx.scale(mirror ? -1 : 1, 1);
-    ctx.drawImage(handImg, -hw / 2, -hh + hw * 0.22, hw, hh);
+    ctx.drawImage(sprite, -hw / 2, -hh * wristFrac, hw, hh);
     ctx.restore();
   }
 
@@ -353,6 +365,7 @@
         rightTarget.x = arm.x;
         rightTarget.y = arm.y;
       }
+      reachSide = useLeft ? 'left' : 'right';
     }
     stepFloater(floaters.left, leftTarget.x, leftTarget.y, frameDt);
     stepFloater(floaters.right, rightTarget.x, rightTarget.y, frameDt);
