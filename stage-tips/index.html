@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Stage Tips | Free browser game from Strip Club Empire</title>
+  <meta name="description" content="Free 90-second browser game. Swipe to catch stage tips. Dodge the bottles, heels, and phones. A slice of the Strip Club Empire management sim.">
+  <link rel="canonical" href="https://stripclubempire.com/stage-tips/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://stripclubempire.com/stage-tips/">
+  <meta property="og:title" content="Stage Tips | Catch the cash">
+  <meta property="og:description" content="Free 90-second browser game from Strip Club Empire. Swipe the tips. Dodge the junk.">
+  <meta property="og:image" content="https://stripclubempire.com/assets/images/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Stage Tips">
+  <meta name="twitter:description" content="Swipe the cash. Dodge the junk. A free slice of Strip Club Empire.">
+  <meta name="twitter:image" content="https://stripclubempire.com/assets/images/og-image.jpg">
+  <meta name="theme-color" content="#07040c">
+  <meta name="rating" content="adult">
+  <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem('sce_age_ok') === '1') document.documentElement.classList.add('age-ok');
+        else document.documentElement.classList.add('age-locked');
+      } catch (e) {
+        document.documentElement.classList.add('age-locked');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="ageTitle" hidden>
+    <div class="age-card" id="ageCard">
+      <p class="kicker">Adults only</p>
+      <h1 id="ageTitle">Are you 18 or older?</h1>
+      <p>Stage Tips is a free 18+ browser game set on a strip-club stage. Suggestive theme. Not a sex game, and not for kids.</p>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="ageEnter">I am 18+ - Enter</button>
+        <button type="button" class="btn btn-secondary" id="ageExit">I am under 18 - Leave</button>
+      </div>
+      <p class="fine">All characters depicted are adults. No real-money gambling.</p>
+    </div>
+    <div class="age-card denied" id="ageDenied" hidden>
+      <h2>Access denied</h2>
+      <p>This game is only for adults 18+. Please leave.</p>
+    </div>
+  </div>
+
+  <div class="app" id="app">
+    <header class="top">
+      <a class="brand" href="../">
+        <img src="../assets/images/logo.png" alt="" width="28" height="28">
+        Strip Club <span>Empire</span>
+      </a>
+      <a class="steam-mini" href="https://store.steampowered.com/app/4994860/Strip_Club_Empire/" target="_blank" rel="noopener">Wishlist the full game</a>
+    </header>
+
+    <div class="stage">
+      <canvas id="game" aria-label="Stage Tips. Swipe to catch cash."></canvas>
+      <div class="hud" id="hud" hidden>
+        <div>
+          <div class="cash" id="cash">$0</div>
+          <div class="combo" id="combo"></div>
+        </div>
+        <div>
+          <div class="timer" id="timer">1:30</div>
+          <div class="round-label" id="roundLabel">Round 1</div>
+        </div>
+      </div>
+      <button type="button" class="mute" id="mute" hidden>Sound on</button>
+
+      <div class="overlay" id="startOverlay">
+        <div class="card">
+          <p class="kicker">Free browser game</p>
+          <h1>Stage Tips</h1>
+          <p>You're on stage. Swipe the cash they throw. Don't grab the junk. 90 seconds, three rounds, and it speeds up.</p>
+          <div class="rules">
+            <div><b>CATCH</b><span>Bills</span></div>
+            <div><b>DODGE</b><span>Beer, heels, phones</span></div>
+            <div><b>COMBO</b><span>Chain the swipes</span></div>
+          </div>
+          <p id="bestStart" class="best-note" hidden></p>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" id="playBtn">Play</button>
+            <a class="btn btn-secondary" href="https://store.steampowered.com/app/4994860/Strip_Club_Empire/" target="_blank" rel="noopener">Wishlist Strip Club Empire</a>
+          </div>
+          <p class="fine">A one-minute slice of the club. The real game is a management sim: design the floor, run the night, grow the empire.</p>
+        </div>
+      </div>
+
+      <div class="overlay" id="endOverlay" hidden>
+        <div class="card">
+          <p class="kicker">Set over</p>
+          <h2>You caught</h2>
+          <p class="score-line" id="endCash">$0</p>
+          <div class="stats">
+            <span id="endCombo">Best combo x1</span>
+            <span id="endJunk">Junk 0</span>
+          </div>
+          <p id="endBest" class="best-note"></p>
+          <p>This was a minute and a half on stage. The full game is designing and running the whole club.</p>
+          <div class="end-actions">
+            <a class="btn btn-primary" href="https://store.steampowered.com/app/4994860/Strip_Club_Empire/" target="_blank" rel="noopener">Wishlist the full club on Steam</a>
+            <button type="button" class="btn btn-secondary" id="againBtn">Play again</button>
+            <button type="button" class="btn btn-secondary" id="copyBtn">Copy score</button>
+          </div>
+          <p class="copy-note" id="copyNote"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="sim.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
