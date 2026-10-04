@@ -6,7 +6,7 @@
 // === CONFIG (swap these when live) ===
 const STEAM_URL = 'https://store.steampowered.com/app/4994860/Strip_Club_Empire/';
 const FACEBOOK_URL = 'https://www.facebook.com/stripclubempire/';
-const TWITTER_URL = 'https://x.com/stripclubempire';
+const TWITTER_URL = 'https://x.com/polygrafix';
 const YOUTUBE_VIDEO_ID = 'QLfaLUFBP6k'; // bouncer exits the ex before he causes trouble
 const YOUTUBE_ORIGIN_HOST = 'stripclubempire.com';
 // Optional local MP4 fallback path (leave empty to use YouTube)
