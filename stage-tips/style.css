@@ -164,6 +164,16 @@ html.age-locked .app {
   font-weight: 700;
 }
 
+.game-rights {
+  margin: 0;
+  padding: 6px 14px 8px;
+  font-size: 11px;
+  line-height: 1.35;
+  color: #8d7c99;
+  background: #07040c;
+}
+.game-rights a { color: var(--gold); }
+
 .stage {
   position: relative;
   flex: 1;
