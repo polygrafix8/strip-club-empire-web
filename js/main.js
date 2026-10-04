@@ -7,7 +7,7 @@
 const STEAM_URL = 'https://store.steampowered.com/app/4994860/Strip_Club_Empire/';
 const FACEBOOK_URL = 'https://www.facebook.com/stripclubempire/';
 const TWITTER_URL = 'https://x.com/stripclubempire';
-const YOUTUBE_VIDEO_ID = '2JXnBtyA3ig'; // sizzle; swap for gameplay trailer later
+const YOUTUBE_VIDEO_ID = 'pyFCcAJjmK8'; // bouncer throws out ex boyfriend
 const YOUTUBE_ORIGIN_HOST = 'stripclubempire.com';
 // Optional local MP4 fallback path (leave empty to use YouTube)
 const LOCAL_GAMEPLAY_MP4 = ''; // e.g. 'assets/video/gameplay.mp4'
@@ -307,7 +307,7 @@ function initTrailerStub() {
     const iframe = document.createElement('iframe');
     // No origin in static src (works on file://). Inject later when on live domain.
     iframe.src = `https://www.youtube-nocookie.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&rel=0`;
-    iframe.title = 'Strip Club Empire Trailer';
+    iframe.title = 'Strip Club Empire gameplay';
     iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
     iframe.allowFullscreen = true;
     iframe.referrerPolicy = 'strict-origin-when-cross-origin';
